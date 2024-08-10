@@ -3,15 +3,19 @@ import {
   register,
   login,
   updateAccount,
-  deleteAccount
+  deleteAccount,
+  changePassword,
+  resetPassword
 } from "../controllers/authController.js";
 
 const router = express.Router();
 
-// Auth specific routes
-router.post("/register", register);
-router.post("/login", login);
-router.patch("/:accountId", updateAccount);
-router.delete("/:accountId", deleteAccount);
+// Auth routes
+router.post("/", register);
+router.get("/", login);
+router.patch("/", updateAccount);
+router.delete("/", deleteAccount);
+router.post("/pass-change", changePassword)
+router.patch("/pass-change", resetPassword)
 
 export default router;

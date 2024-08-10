@@ -7,13 +7,18 @@ import {
   deleteSheet
 } from "../controllers/sheetsController.js";
 
+import entryRouter from "./entryRouter.js";
+
 const router = express.Router();
 
-// Sheets routers
+// Re-route to entries specific routes
+router.use("/:sheetId/entries", entryRouter)
+
+// Sheets routes
 router.get("/", getSheets);
-router.get("/:sheetId", getSheet);
 router.post("/", createSheet);
-router.patch("/:projectId", updateSheet);
-router.delete("/:projectId", deleteSheet);
+router.get("/:sheetId", getSheet);
+router.patch("/:sheetId", updateSheet);
+router.delete("/:sheetId", deleteSheet);
 
 export default router;

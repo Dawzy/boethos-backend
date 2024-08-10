@@ -3,7 +3,6 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import errorHandler from "./middleware/error.js";
-import entryRouter from "./routes/entryRouter.js";
 import authRouter from "./routes/authRouter.js"
 import sheetsRouter from "./routes/sheetsRouter.js"
 
@@ -20,7 +19,6 @@ if (process.env.NODE_ENV === "dev") app.use(morgan("dev"))
 // Mount routers
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/sheets", sheetsRouter);
-app.use("/api/v1/entry", entryRouter);
 
 // Mount middleware
 app.use(errorHandler);

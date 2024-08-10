@@ -7,24 +7,16 @@ const errorHandler = (err, req, res, next) => {
 	// Log error
 	console.log(err.stack);
 
-	// Mongoose bad ObjectId
-	if (err.name === "CastError") {
-		const message = `Project with id ${err.value} not found.`;
-		error = new ErrorResponse(message, 404);
-	}
+  // Handle postgres errors
+  if (err.code)
+    error = new ErrorResponse(`Database error.`, 500);
 
-	// Mongoose duplicate key
-	if (err.code === 11000) {
-		const message = "Duplicate field value entered";
-		error = new ErrorResponse(message, 400);
-	}
+  if (err.constraint === "accounts_email_key")
+    error = new ErrorResponse("Email already exists.", 400)
 
-	// Mongoose validation error
-	if (err.name === "ValidationError") {
-		// Extract all the error messages
-		const message = Object.values(err.errors).map(val => val.message);
-		error = new ErrorResponse(message, 400);
-	}
+  // Handle authorization errors
+  if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError" || err.name === "NotBeforeError")
+    error.message = `Invalid token: ${error.message}.`;
 
 	// Return the error object
 	res.status(error.statusCode || 500).json({
